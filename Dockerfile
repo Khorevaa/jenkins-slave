@@ -13,7 +13,8 @@ ENV PATH $JAVA_HOME/bin:$PATH
 # apparmor is required to run docker server within docker container
 RUN apt-get update -qq && apt-get install -qqy wget curl git iptables ca-certificates apparmor
 
-ENV JENKINS_SWARM_VERSION 2.2
+ENV JENKINS_SWARM_VERSION 3.3
+ENV RANCHER_CLI_VERSION v0.5.0
 ENV HOME /home/jenkins-slave
 
 
@@ -34,8 +35,8 @@ RUN curl -fsSLO https://get.docker.com/builds/Linux/x86_64/docker-latest.tgz \
   && tar --strip-components=1 -xvzf docker-latest.tgz -C /usr/local/bin \
   && chmod +x /usr/local/bin/docker \
 # install Rancher CLI
-  && curl -fsSLO https://github.com/rancher/cli/releases/download/v0.4.1/rancher-linux-amd64-v0.4.1.tar.gz \
-  && tar --strip-components=2 -xzvf rancher-linux-amd64-v0.4.1.tar.gz -C /usr/local/bin \
+  && curl -fsSLO https://github.com/rancher/cli/releases/download/$RANCHER_CLI_VERSION/rancher-linux-amd64-$RANCHER_CLI_VERSION.tar.gz \
+  && tar --strip-components=2 -xzvf rancher-linux-amd64-$RANCHER_CLI_VERSION.tar.gz -C /usr/local/bin \
   && chmod +x /usr/local/bin/rancher
 
 VOLUME /var/lib/docker
