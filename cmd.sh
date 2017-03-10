@@ -24,6 +24,7 @@ else
   if getent hosts rancher-metadata >/dev/null; then
     SLAVE_NAME=$(curl http://rancher-metadata/latest/self/container/name)
     PARAMS="$PARAMS -name $SLAVE_NAME"
+  fi
 fi
 if [ ! -z "$JENKINS_MASTER" ]; then
   PARAMS="$PARAMS -master $JENKINS_MASTER"
