@@ -8,16 +8,22 @@ if [ ! -z "$JENKINS_USERNAME" ]; then
   PARAMS="$PARAMS -username $JENKINS_USERNAME"
 fi
 if [ ! -z "$JENKINS_PASSWORD" ]; then
-  PARAMS="$PARAMS -password $JENKINS_PASSWORD"
+  PARAMS="$PARAMS --passwordEnvVariable JENKINS_PASSWORD"
 fi
 if [ ! -z "$SLAVE_EXECUTORS" ]; then
   PARAMS="$PARAMS -executors $SLAVE_EXECUTORS"
 fi
-if [ ! -z "$SLAVE_LABELS" ]; then
-  PARAMS="$PARAMS -labels $SLAVE_LABELS"
+if [ ! -z "$NODE_LABELS" ]; then
+  for l in $NODE_LABELS; do
+    PARAMS="$PARAMS -labels $l"
+  done
 fi
 if [ ! -z "$SLAVE_NAME" ]; then
   PARAMS="$PARAMS -name $SLAVE_NAME"
+else
+  if getent hosts rancher-metadata >/dev/null; then
+    SLAVE_NAME=$(curl http://rancher-metadata/latest/self/container/name)
+    PARAMS="$PARAMS -name $SLAVE_NAME"
 fi
 if [ ! -z "$JENKINS_MASTER" ]; then
   PARAMS="$PARAMS -master $JENKINS_MASTER"
