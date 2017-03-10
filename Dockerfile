@@ -23,22 +23,22 @@ RUN curl --create-dirs -sSLo $HOME/swarm-client-$JENKINS_SWARM_VERSION.jar https
 ADD cmd.sh /cmd.sh
 
 # set our wrapper
-ENTRYPOINT ["/usr/local/bin/docker-wrapper"]
+# ENTRYPOINT ["/usr/local/bin/docker-wrapper"]
 
 # setup our local files first
-ADD docker-wrapper.sh /usr/local/bin/docker-wrapper
-RUN chmod +x /usr/local/bin/docker-wrapper
+#ADD docker-wrapper.sh /usr/local/bin/docker-wrapper
+#RUN chmod +x /usr/local/bin/docker-wrapper
 
 # now we install docker in docker - thanks to https://github.com/jpetazzo/dind
 # We install newest docker into our docker in docker container
-RUN curl -fsSLO https://get.docker.com/builds/Linux/x86_64/docker-latest.tgz \
-  && tar --strip-components=1 -xvzf docker-latest.tgz -C /usr/local/bin \
-  && chmod +x /usr/local/bin/docker \
+#RUN curl -fsSLO https://get.docker.com/builds/Linux/x86_64/docker-latest.tgz \
+#  && tar --strip-components=1 -xvzf docker-latest.tgz -C /usr/local/bin \
+#  && chmod +x /usr/local/bin/docker
 # install Rancher CLI
-  && curl -fsSLO https://github.com/rancher/cli/releases/download/$RANCHER_CLI_VERSION/rancher-linux-amd64-$RANCHER_CLI_VERSION.tar.gz \
+RUN curl -fsSLO https://github.com/rancher/cli/releases/download/$RANCHER_CLI_VERSION/rancher-linux-amd64-$RANCHER_CLI_VERSION.tar.gz \
   && tar --strip-components=2 -xzvf rancher-linux-amd64-$RANCHER_CLI_VERSION.tar.gz -C /usr/local/bin \
   && chmod +x /usr/local/bin/rancher
-
+RUN rm rancher-linux-amd64-$RANCHER_CLI_VERSION.tar.gz 
 VOLUME /var/lib/docker
 
 #ENV JENKINS_USERNAME jenkins
